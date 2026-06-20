@@ -42,6 +42,7 @@ This forces the live request to fail and shows the mock fallback state.
   - Biggest mover.
 - A top 24h movers bar chart.
 - A searchable, filterable, sortable top-100 market table.
+- Keyboard-accessible row selection using Tab plus Enter/Space.
 - A selected coin detail panel with:
   - Price.
   - 1h / 24h / 7d movement.
@@ -68,7 +69,7 @@ The app requests:
 - `sparkline=true`
 - `price_change_percentage=1h,24h,7d`
 
-If the API is unavailable and no cached data exists, the app renders local mock market data with a clear `Mock fallback` badge.
+The app shows a skeleton while the first live request is in flight. If the API is unavailable and no cached data exists after that request fails, the app renders local mock market data with a clear `Mock fallback` badge. Mock data is not labeled as freshly updated live data.
 
 ## Main Project Structure
 
@@ -107,6 +108,6 @@ src/
 - Longer historical ranges such as 30D/90D/1Y are not implemented.
 - The main chart uses Recharts and is isolated behind a chart component so it can be replaced later.
 - Virtualized rows are not implemented because 100 rows is manageable for this MVP.
+- Automated browser screenshot QA was not completed because the local Playwright package did not have a browser binary installed.
 - Coin images are loaded from CoinGecko and may fail independently from market data.
 - The production bundle currently emits a Vite chunk-size warning because Mantine and Recharts are included in the MVP bundle.
-

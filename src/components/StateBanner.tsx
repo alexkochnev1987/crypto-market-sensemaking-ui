@@ -12,11 +12,13 @@ type StateBannerProps = {
 };
 
 export function StateBanner({ source, isFetching, isStale, error, dataUpdatedAt }: StateBannerProps) {
-  const tone = error ? 'orange' : source === 'mock' ? 'yellow' : isStale ? 'gray' : 'green';
+  const tone = source === 'loading' ? 'blue' : error ? 'orange' : source === 'mock' ? 'yellow' : isStale ? 'gray' : 'green';
   const icon = error || source === 'mock' ? <AlertTriangle size={18} /> : <Database size={18} />;
 
   const message =
-    source === 'mock'
+    source === 'loading'
+      ? 'Loading live market data from CoinGecko.'
+      : source === 'mock'
       ? 'Live API data is unavailable, so the dashboard is using sample market data.'
       : error
         ? 'The latest refresh failed. Existing market data remains visible while you retry.'
@@ -35,7 +37,7 @@ export function StateBanner({ source, isFetching, isStale, error, dataUpdatedAt 
             </Badge>
           ) : null}
           <Badge color={tone} variant="filled">
-            {source === 'mock' ? 'Mock fallback' : isStale ? 'Stale' : 'Fresh'}
+            {source === 'loading' ? 'Loading' : source === 'mock' ? 'Mock fallback' : isStale ? 'Stale' : 'Fresh'}
           </Badge>
           {dataUpdatedAt ? (
             <Text c="dimmed" size="xs">

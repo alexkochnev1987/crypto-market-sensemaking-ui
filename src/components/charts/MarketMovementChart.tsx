@@ -17,6 +17,32 @@ type MarketMovementChartProps = {
   data: MovementPoint[];
 };
 
+type MovementTooltipProps = {
+  active?: boolean;
+  payload?: Array<{ payload: MovementPoint }>;
+};
+
+function MovementTooltip({ active, payload }: MovementTooltipProps) {
+  if (!active || !payload?.[0]) return null;
+
+  const point = payload[0].payload as MovementPoint;
+
+  return (
+    <div className="chart-tooltip">
+      <Text fw={700} size="sm">
+        {point.name} ({point.symbol})
+      </Text>
+      <Text size="sm">24h move: {formatPercent(point.change24h)}</Text>
+      <Text c="dimmed" size="xs">
+        Volume: {formatUsd(point.volume24h, true)}
+      </Text>
+      <Text c="dimmed" size="xs">
+        Market cap: {formatUsd(point.marketCap, true)}
+      </Text>
+    </div>
+  );
+}
+
 export function MarketMovementChart({ data }: MarketMovementChartProps) {
   return (
     <Card padding="lg" radius="md" withBorder>
@@ -46,19 +72,7 @@ export function MarketMovementChart({ data }: MarketMovementChartProps) {
                 width={64}
               />
               <ReferenceLine stroke="#8a94a6" x={0} />
-              <Tooltip
-                formatter={(value, _unusedName, point) => [
-                  formatPercent(Number(value)),
-                  point.payload.name,
-                ]}
-                labelFormatter={(label) => `${label}`}
-                contentStyle={{
-                  borderRadius: 8,
-                  border: '1px solid #d5dae3',
-                  boxShadow: '0 12px 24px rgba(15, 23, 42, 0.12)',
-                }}
-                itemSorter={() => 0}
-              />
+              <Tooltip content={<MovementTooltip />} cursor={{ fill: 'rgba(47, 109, 246, 0.06)' }} />
               <Bar dataKey="change24h" name="24h change" radius={[4, 4, 4, 4]}>
                 {data.map((entry) => (
                   <Cell
@@ -71,7 +85,7 @@ export function MarketMovementChart({ data }: MarketMovementChartProps) {
           </ResponsiveContainer>
         </div>
         <Text c="dimmed" size="xs">
-          Tooltip context includes liquidity: {data[0] ? `${data[0].symbol} volume ${formatUsd(data[0].volume24h, true)}` : 'N/A'}.
+          Hover or focus the chart to compare 24h movement with volume and market cap context.
         </Text>
       </Stack>
     </Card>

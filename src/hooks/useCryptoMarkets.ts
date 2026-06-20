@@ -13,10 +13,17 @@ export function useCryptoMarkets() {
   const cachedData = queryClient.getQueryData<Awaited<ReturnType<typeof fetchCryptoMarkets>>>([
     'crypto-markets',
   ]);
-  const hasLiveData = Boolean(query.data?.length);
-  const hasCachedData = Boolean(cachedData?.length);
-  const data = query.data ?? cachedData ?? mockMarkets;
-  const source: MarketDataSource = hasLiveData ? 'live' : hasCachedData ? 'cached' : 'mock';
+  const hasLiveData = query.isSuccess && Boolean(query.data?.length);
+  const hasCachedData = !hasLiveData && Boolean(cachedData?.length);
+  const shouldUseMock = query.isError && !hasCachedData;
+  const data = hasLiveData ? query.data : hasCachedData ? cachedData : shouldUseMock ? mockMarkets : [];
+  const source: MarketDataSource = hasLiveData
+    ? 'live'
+    : hasCachedData
+      ? 'cached'
+      : shouldUseMock
+        ? 'mock'
+        : 'loading';
 
   return {
     ...query,

@@ -47,6 +47,11 @@ select {
   cursor: pointer;
 }
 
+.market-table tbody tr:focus-visible {
+  outline: 2px solid #2f6df6;
+  outline-offset: -2px;
+}
+
 .selected-row {
   background: rgba(47, 109, 246, 0.08);
 }
@@ -82,6 +87,15 @@ select {
   border-radius: 8px;
   color: #667085;
   font-size: 13px;
+}
+
+.chart-tooltip {
+  min-width: 180px;
+  border: 1px solid #d5dae3;
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: #ffffff;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);
 }
 
 @media (max-width: 760px) {

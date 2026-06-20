@@ -32,7 +32,8 @@ Fallback behavior:
 
 - Live API success: show live data.
 - Live API failure with cached data: keep cached data visible and show a warning.
-- Live API failure without cached data: show local mock data with a clear `Mock fallback` badge.
+- First live request still pending: show skeleton loading UI instead of prematurely showing mock data.
+- Live API failure without cached data: show local mock data with a clear `Mock fallback` badge and no live freshness timestamp.
 
 ## Visualization Approach
 
@@ -42,6 +43,7 @@ The primary visualization is a top 24h movers bar chart. It is intentionally sim
 - Negative moves are red.
 - Bars are split around zero.
 - The chart ranks assets by absolute 24h movement.
+- The tooltip adds volume and market-cap context so a large percentage move can be read alongside liquidity.
 
 This was chosen over a scatter plot because it is faster to interpret, easier to implement correctly in the time limit, and directly answers "what is moving right now?"
 
@@ -57,6 +59,7 @@ The implemented interactions are:
 - Segment filters: all, gainers, losers, high volume, large cap.
 - Sorting by rank, price, 1h change, 24h change, 7d change, market cap, or volume.
 - Row selection.
+- Keyboard row selection with Tab plus Enter/Space, including a visible focus state.
 - Selected coin detail panel.
 - Manual refresh.
 

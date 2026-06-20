@@ -19,6 +19,8 @@ The initial plan included a broader scope, including a theme toggle and possible
 - One main movement chart.
 - Selected coin detail panel with a 7-day sparkline.
 - Explicit stale/error/mock fallback states.
+- Real initial loading before mock fallback.
+- Keyboard-accessible row selection.
 
 The UI library choice also changed from a possible shadcn/ui setup to Mantine for faster delivery of accessible dashboard components within the time limit.
 
@@ -33,6 +35,8 @@ Accepted suggestions:
 - Use local mock data if the public API is unavailable.
 - Add a derived `Market mood` signal.
 - Keep the app as a single-screen exploration tool.
+- Tighten the fallback state so mock data only appears after the first live request fails.
+- Add keyboard support for table row exploration.
 
 ## AI Suggestions Rejected
 
@@ -58,6 +62,7 @@ I personally decided to:
 - Add `VITE_FORCE_API_ERROR=true` as a practical fallback verification path.
 - Keep longer historical ranges out of the MVP.
 - Verify the build locally.
+- Re-check the implementation after review feedback and update the documentation to match the final behavior.
 
 ## How I Checked The Final Result
 
@@ -69,8 +74,9 @@ Verification performed:
 - Started the Vite dev server at `http://127.0.0.1:5173/`.
 - Confirmed the dev server returned `HTTP/1.1 200 OK`.
 - Added a documented fallback verification path using `VITE_FORCE_API_ERROR=true npm run dev`.
+- After review fixes, ran `npm run build` again successfully.
 
-Browser automation was not available in this environment, so visual browser QA was not completed here. Before final submission, the app should be opened in a browser and checked for:
+Browser automation tooling was present, but the Playwright browser binary was not installed in this environment, so visual browser QA was not completed here. Before final submission, the app should be opened in a browser and checked for:
 
 - Live data load.
 - Search.

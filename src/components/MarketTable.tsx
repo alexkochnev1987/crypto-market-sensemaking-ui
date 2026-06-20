@@ -35,9 +35,18 @@ export function MarketTable({ coins, selectedCoinId, onSelectCoin }: MarketTable
           <Table.Tbody>
             {coins.map((coin) => (
               <Table.Tr
+                aria-selected={coin.id === selectedCoinId}
                 className={coin.id === selectedCoinId ? 'selected-row' : undefined}
                 key={coin.id}
                 onClick={() => onSelectCoin(coin.id)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    onSelectCoin(coin.id);
+                  }
+                }}
+                role="button"
+                tabIndex={0}
               >
                 <Table.Td>
                   <Text fw={600} size="sm">

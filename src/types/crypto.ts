@@ -51,7 +51,7 @@ export type CoinMarket = {
   sparkline7d: number[];
 };
 
-export type MarketDataSource = 'live' | 'cached' | 'mock';
+export type MarketDataSource = 'loading' | 'live' | 'cached' | 'mock';
 
 export type MarketFilter = 'all' | 'gainers' | 'losers' | 'high-volume' | 'large-cap';
 

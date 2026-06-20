@@ -32,8 +32,8 @@ export default function App() {
   const [selectedCoinId, setSelectedCoinId] = useState<string | null>(null);
 
   const marketsQuery = useCryptoMarkets();
-  const coins = marketsQuery.data;
-  const dataUpdatedAt = marketsQuery.dataUpdatedAt || Date.now();
+  const coins = marketsQuery.data ?? [];
+  const dataUpdatedAt = marketsQuery.source === 'mock' ? 0 : marketsQuery.dataUpdatedAt;
 
   const summary = useMemo(() => getMarketSummary(coins), [coins]);
   const topMovers = useMemo(() => getTopMovers(coins), [coins]);
@@ -42,17 +42,19 @@ export default function App() {
     [coins, filter, query, sortDirection, sortKey],
   );
   const selectedCoin = useMemo(
-    () => coins.find((coin) => coin.id === selectedCoinId) ?? visibleCoins[0] ?? null,
-    [coins, selectedCoinId, visibleCoins],
+    () => visibleCoins.find((coin) => coin.id === selectedCoinId) ?? visibleCoins[0] ?? null,
+    [selectedCoinId, visibleCoins],
   );
 
   useEffect(() => {
-    if (!selectedCoinId && visibleCoins[0]) {
-      setSelectedCoinId(visibleCoins[0].id);
+    const nextSelectedId = visibleCoins.find((coin) => coin.id === selectedCoinId)?.id ?? visibleCoins[0]?.id ?? null;
+
+    if (nextSelectedId !== selectedCoinId) {
+      setSelectedCoinId(nextSelectedId);
     }
   }, [selectedCoinId, visibleCoins]);
 
-  const showInitialLoading = marketsQuery.isLoading && !marketsQuery.isUsingMock;
+  const showInitialLoading = marketsQuery.source === 'loading';
   const error = marketsQuery.error instanceof Error ? marketsQuery.error : null;
 
   return (
